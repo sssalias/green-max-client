@@ -1,0 +1,14 @@
+.chat-history {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.chat-history > :first-child {
+    margin-top: auto;
+}
+

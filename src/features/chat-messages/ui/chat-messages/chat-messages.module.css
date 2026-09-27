@@ -1,0 +1,26 @@
+.chat-messages {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages-wrapper-empty {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chat-messages-container-empty {
+    background-color: var(--color-surface);
+    padding: 10px;
+    border-radius: var(--radius-md);
+}
+
+.chat-messages-heading-empty {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-regular);
+}

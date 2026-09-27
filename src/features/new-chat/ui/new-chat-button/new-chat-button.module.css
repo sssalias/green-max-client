@@ -1,0 +1,10 @@
+.new-chat-button {
+    border-radius: var(--radius-full) !important;
+    position: absolute !important;
+    height: 60px;
+    width: 60px;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}

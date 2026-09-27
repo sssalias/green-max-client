@@ -1,0 +1,28 @@
+.chat-input {
+    position: relative;
+    width: calc(100% - var(--space-8));
+    height: 60px;
+    display: flex;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: var(--space-4);
+}
+
+.chat-input-textarea {
+    width: 100%;
+    /*border: 1px solid red;*/
+    outline: none;
+    border: none;
+
+    &:focus {
+        border: none;
+    }
+}
+
+.chat-input-button-group {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+}
