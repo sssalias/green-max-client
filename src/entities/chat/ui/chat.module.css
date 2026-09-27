@@ -1,0 +1,29 @@
+.chat {
+    border-bottom: 1px solid var(--color-border);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    cursor: pointer;
+
+    transition: background-color var(--duration-fast);
+
+    &:hover {
+        background-color: var(--color-primary-soft);
+    }
+}
+
+.chat-avatar-container {
+
+}
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.chat-info-name {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-md);
+}
