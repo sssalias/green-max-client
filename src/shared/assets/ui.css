@@ -96,6 +96,10 @@
     --z-toast: 500;
 }
 
+html, body, #root {
+    height: 100%;
+}
+
 * {
     font-family: var(--font-family);
     box-sizing: border-box;

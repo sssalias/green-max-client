@@ -4,7 +4,7 @@ import './ui.css';
 interface ModalProps {
   open: boolean;
   onClose: () => void;
-  title?: string;
+  title?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -29,9 +29,12 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
 
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) onClose();
+      if (e.target === e.currentTarget) {
+        onClose();
+        handleAnimationEnd();
+      }
     },
-    [onClose],
+    [onClose]
   );
 
   useEffect(() => {
@@ -49,7 +52,12 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
 
   return (
     <div className="ui-modal-overlay" onClick={handleOverlayClick}>
-      <div className={`ui-modal ${animationClass}`} role="dialog" aria-modal="true">
+      <div
+        className={`ui-modal ${animationClass}`}
+        role="dialog"
+        aria-modal="true"
+        onAnimationEnd={handleAnimationEnd}
+      >
         {title && (
           <div className="ui-modal__header">
             <h2 className="ui-modal__title">{title}</h2>
