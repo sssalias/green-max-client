@@ -1,0 +1,30 @@
+.chat-view-container {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+.chat-view-aside {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages-container {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    background-image:
+            linear-gradient(rgba(229, 241, 255, 0.8), rgba(229, 241, 255, 0.8)),
+            url("mask.webp");
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: var(--color-primary-soft);
+    background-blend-mode: luminosity;
+}

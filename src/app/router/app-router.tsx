@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import { LoginPage } from '@/pages';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { ChatPage, LoginPage } from '@/pages';
 
 interface IRoute {
   path: string;
@@ -9,7 +9,15 @@ interface IRoute {
 const RouterData: IRoute[] = [
   {
     path: '/',
+    page: <Navigate to="/chat" />,
+  },
+  {
+    path: '/login',
     page: <LoginPage />,
+  },
+  {
+    path: '/chat',
+    page: <ChatPage />,
   },
 ];
 

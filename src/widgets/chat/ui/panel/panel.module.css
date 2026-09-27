@@ -1,0 +1,6 @@
+.panel {
+    height: 50px;
+    background-color: var(--color-primary);
+    display: flex;
+    align-items: center;
+}
