@@ -1,10 +1,10 @@
-import { UiButton } from '@/shared/ui';
+import styles from './login-page.module.css';
+import { LoginForm } from '@/features/login';
 
 export function LoginPage() {
   return (
-    <main>
-      <h1>Главная</h1>
-      <UiButton>Привет!</UiButton>
+    <main className={styles.main}>
+      <LoginForm />
     </main>
   );
 }
