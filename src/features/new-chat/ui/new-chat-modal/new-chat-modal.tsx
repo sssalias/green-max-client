@@ -3,6 +3,7 @@ import { UiBadge, UiButton, UiInput, UiModal } from '@/shared/ui';
 import { useState } from 'react';
 import { NewChatButton } from '@/features/new-chat/ui/new-chat-button';
 import { useCheckAccount } from '@/features/new-chat/model';
+import { useDebounce } from '@/shared/lib';
 
 export default function NewChatModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,10 +18,20 @@ export default function NewChatModal() {
     },
   });
 
+  const debouncedMutate = useDebounce((num: number) => mutateAsync(num), 500);
+
   return (
     <>
       <NewChatButton onOpen={() => setIsOpen(true)} />
-      <UiModal title="Новый чат" open={isOpen} onClose={() => setIsOpen(false)}>
+      <UiModal
+        title="Новый чат"
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setPhoneNumber('');
+          setError(null);
+        }}
+      >
         <div className={styles.newChatModalWrapper}>
           {error && <UiBadge variant="danger">{error}</UiBadge>}
           <UiInput
@@ -29,7 +40,7 @@ export default function NewChatModal() {
             type="tel"
             label="Номер телефона"
           />
-          <UiButton onClick={() => mutateAsync(+phoneNumber)}>Начать чат</UiButton>
+          <UiButton onClick={() => debouncedMutate(+phoneNumber)}>Начать чат</UiButton>
         </div>
       </UiModal>
     </>
