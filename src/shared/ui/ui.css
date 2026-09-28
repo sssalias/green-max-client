@@ -484,6 +484,8 @@
     0% { opacity: 1; transform: scale(1) translateY(0); }
     100% { opacity: 0; transform: scale(0.9) translateY(10px); }
 }
+
+.ui-toast {
     display: flex;
     align-items: center;
     gap: var(--space-3);
