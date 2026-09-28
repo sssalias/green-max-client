@@ -20,7 +20,7 @@ export default function ChatHistory({ chatId }: { chatId: string }) {
 
       if (
         receivedNotification.body.senderData.chatId === chatId &&
-        receivedNotification.body.messageData.typeMessage !== 'buttonsMessage'
+        receivedNotification.body.messageData.typeMessage === 'textMessage'
       ) {
         queryClient.setQueryData(['/chat-history', chatId], (state: MessageEntity[]) => {
           const receivedMessage = MessageEntity.create(
