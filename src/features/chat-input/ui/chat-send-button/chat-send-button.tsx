@@ -1,6 +1,7 @@
 import styles from './chat-send-button.module.css';
 import { UiButton } from '@/shared/ui';
 import { useSendMessage } from '@/features/chat-input';
+import { useDebounce } from '@/shared/lib';
 import { SendHorizonal } from 'lucide-react';
 
 export default function ChatSendButton({
@@ -14,13 +15,13 @@ export default function ChatSendButton({
 }) {
   const { mutateAsync } = useSendMessage({ chatId, message });
 
-  const handleClick = async () => {
+  const debouncedSend = useDebounce(async () => {
     await mutateAsync();
     clearMessage();
-  };
+  }, 300);
 
   return (
-    <UiButton onClick={handleClick} className={styles.chatSendButton}>
+    <UiButton onClick={debouncedSend} className={styles.chatSendButton}>
       <SendHorizonal />
     </UiButton>
   );
