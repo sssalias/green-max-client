@@ -1,4 +1,4 @@
-const loginDataKey = 'logout-data';
+const loginDataKey = 'login-data';
 
 type logoutStoragePort = {
   deleteLoginData(): void;
