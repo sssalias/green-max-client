@@ -1,24 +1,22 @@
 import styles from './new-chat-modal.module.css';
-import { UiBadge, UiButton, UiInput, UiModal } from '@/shared/ui';
+import { UiBadge, UiButton, UiModal } from '@/shared/ui';
 import { useState } from 'react';
 import { NewChatButton } from '@/features/new-chat/ui/new-chat-button';
 import { useCheckAccount } from '@/features/new-chat/model';
 import { useDebounce } from '@/shared/lib';
-import { useIMask } from 'react-imask';
+import { IMaskInput } from 'react-imask';
 
 export default function NewChatModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const { ref, unmaskedValue, setValue } = useIMask({
-    mask: '+7 (000) 000-00-00',
-    lazy: false,
-  });
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [inputVersion, setInputVersion] = useState(0);
 
   const { mutateAsync } = useCheckAccount({
     onError: (msg) => setError(msg),
     onSuccess: () => {
-      setValue('');
+      setPhoneNumber('');
+      setInputVersion((version) => version + 1);
       setIsOpen(false);
     },
   });
@@ -27,7 +25,8 @@ export default function NewChatModal() {
 
   const handleClose = () => {
     setIsOpen(false);
-    setValue('');
+    setPhoneNumber('');
+    setInputVersion((version) => version + 1);
     setError(null);
   };
 
@@ -38,16 +37,26 @@ export default function NewChatModal() {
         <div className={styles.newChatModalWrapper}>
           {error && <UiBadge variant="danger">{error}</UiBadge>}
 
-          <UiInput
-            ref={ref as any}
-            type="tel"
-            label="Номер телефона"
-            placeholder="+7 (___) ___-__-__"
-          />
+          <div className="ui-input-wrapper">
+            <label className="ui-input-label" htmlFor="new-chat-phone">
+              Номер телефона
+            </label>
+            <IMaskInput
+              key={inputVersion}
+              id="new-chat-phone"
+              mask="+{7} (000) 000-00-00"
+              unmask
+              lazy={false}
+              type="tel"
+              className="ui-input"
+              placeholder="+7 (___) ___-__-__"
+              onAccept={(value) => setPhoneNumber(value)}
+            />
+          </div>
 
           <UiButton
-            onClick={() => debouncedMutate(+unmaskedValue)}
-            disabled={unmaskedValue.length < 10}
+            onClick={() => debouncedMutate(Number(phoneNumber))}
+            disabled={phoneNumber.length < 11}
           >
             Начать чат
           </UiButton>
