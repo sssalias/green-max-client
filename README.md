@@ -1,78 +1,150 @@
-# React + TypeScript + Vite
+# Green Max Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Тестовое задание на должность "Фронтенд разработчик React". Пользовательский интерфейс для отправки и получения текстовых сообщений в MAX через Green API.
 
-Currently, two official plugins are available:
+## Бизнес-логика
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Авторизация
 
-## React Compiler
+Пользователь вводит `idInstance` и `apiTokenInstance` в форме авторизации. Данные сохраняются в localStorage и используются для последующих запросов к Green API. При отсутствии данных авторизации пользователь перенаправляется на страницу входа.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### Создание нового чата
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+Пользователь вводит номер телефона получателя в формате `+7 (XXX) XXX-XX-XX`. Система проверяет существование аккаунта через `checkAccount`. Если пользователь найден, чат создаётся и пользователь перенаправляется на страницу чата. Если пользователь не найден, отображается ошибка.
 
-## Expanding the ESLint configuration
+### Список чатов
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+При загрузке страницы чата выполняется запрос `getChats` для получения списка всех чатов пользователя. Чаты отображаются в боковой панели с именем и аватаром.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### История сообщений
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+При выборе чата загружается история сообщений через `getChatHistory` (последние 100 сообщений). Сообщения отображаются в обратном хронологическом порядке (новые внизу).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Отправка сообщений
+
+Пользователь вводит текстовое сообщение и нажимает кнопку отправки. Сообщение отправляется через `sendMessage`. После успешной отправки сообщение добавляется в локальный кэш и отображается в чате.
+
+### Получение входящих сообщений
+
+Система опрашивает `receiveNotification` каждую секунду (polling). При получении уведомления:
+1. Уведомление удаляется через `deleteNotification`
+2. Если уведомление относится к текущему чату и является текстовым сообщением, оно добавляется в историю сообщений
+
+## Технологии
+
+- **React 19** — UI-библиотека
+- **TypeScript** — типизация
+- **Vite** — сборщик
+- **React Router** — маршрутизация
+- **TanStack Query** — управление серверным состоянием
+- **Axios** — HTTP-клиент
+- **Feature-Sliced Design** — архитектура
+
+## Структура проекта
 
 ```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+src/
+├── app/                    # Инициализация приложения, роутинг
+│   ├── core/               # Ядро приложения
+│   └── router/             # Настройка маршрутов
+├── pages/                  # Страницы
+│   ├── auth/               # Страница авторизации
+│   └── chat/               # Страница чата
+├── widgets/                # Составные виджеты
+│   └── chat/               # Виджет чата
+├── features/               # Функциональные модули
+│   ├── account/            # Настройки аккаунта
+│   ├── chat-feed/          # Лента чатов
+│   ├── chat-input/         # Ввод сообщений
+│   ├── chat-messages/      # Сообщения чата
+│   ├── login/              # Авторизация
+│   └── new-chat/           # Создание нового чата
+├── entities/               # Бизнес-сущности
+│   ├── account/            # Аккаунт
+│   ├── avatar/             # Аватар
+│   ├── chat/               # Чат
+│   ├── message/            # Сообщение
+│   └── notification/       # Уведомления
+└── shared/                 # Переиспользуемый код
+    ├── api/                # API-клиент
+    ├── assets/             # Статические ресурсы
+    ├── lib/                # Утилиты и хуки
+    └── ui/                 # UI-компоненты
 ```
+
+## Установка и запуск
+
+### Требования
+
+- Node.js 20+
+- Yarn
+
+### Установка зависимостей
+
+```bash
+yarn install
+```
+
+### Запуск в режиме разработки
+
+```bash
+yarn dev
+```
+
+### Сборка для продакшена
+
+```bash
+yarn build
+```
+
+### Предпросмотр сборки
+
+```bash
+yarn preview
+```
+
+### Линтинг
+
+```bash
+yarn lint
+```
+
+## Переменные окружения
+
+Создайте файл `.env` в корне проекта:
+
+```env
+VITE_API_URL=https://3100.api.green-api.com
+```
+
+## Docker
+
+### Сборка и запуск
+
+```bash
+docker build -t green-max-client .
+docker run -p 80:80 green-max-client
+```
+
+### Локальная разработка с Docker
+
+```bash
+docker build -f Dockerfile.local -t green-max-client-local .
+docker run -p 3000:3000 green-max-client-local
+```
+
+## Известные проблемы и недостатки
+
+### Производительность
+
+- **Отсутствие виртуализации списка сообщений** — при большом количестве сообщений в чате страница начинает тормозить. Необходимо использовать виртуальный список (например, `@tanstack/react-virtual`)
+- **Нет подгрузки старых сообщений** — при прокрутке вверх не подгружаются предыдущие сообщения. Необходимо реализовать пагинацию или бесконечную прокрутку
+- **N+1 проблема в ленте чатов** — для каждого чата выполняются отдельные запросы на получение аватарки и последнего сообщения. Это приводит к лавине запросов и нагружает сервер
+
+### Безопасность
+
+- **Хранение учётных данных в localStorage** — `idInstance` и `apiTokenInstance` хранятся в открытом виде, что позволяет украсть данные через XSS-атаку. Необходимо реализовать модель сессий и раздавать клиенту через BFF (Backend for Frontend), что также поможет скрыть внутреннюю инфраструктуру бэкенда
+
+### Надёжность
+
+- **Отсутствие валидации данных** — нет проверки на валидность данных, получаемых от API и вводимых пользователем. Необходимо добавить валидацию с использованием Zod или другой библиотеки
