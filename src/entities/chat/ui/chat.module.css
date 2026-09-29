@@ -13,6 +13,12 @@
     }
 }
 
+.chat-active {
+    background-color: var(--color-primary-soft);
+    border-left: 3px solid var(--color-primary);
+    padding-left: 17px;
+}
+
 .chat-avatar-container {
 
 }
