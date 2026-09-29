@@ -21,7 +21,7 @@
 
     background-image:
             linear-gradient(rgba(229, 241, 255, 0.8), rgba(229, 241, 255, 0.8)),
-            url("mask.webp");
+            url("/mask.webp");
 
     background-size: cover;
     background-repeat: no-repeat;
