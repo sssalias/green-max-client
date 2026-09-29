@@ -5,6 +5,7 @@ import { useDeleteNotification, useGetReceiveNotification } from '@/entities/not
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useScrollToBottom } from '@/shared/lib';
+import { queryKeys } from '@/shared/api';
 
 export default function ChatHistory({ chatId }: { chatId: string }) {
   const queryClient = useQueryClient();
@@ -22,7 +23,7 @@ export default function ChatHistory({ chatId }: { chatId: string }) {
         receivedNotification.body.senderData.chatId === chatId &&
         receivedNotification.body.messageData.typeMessage === 'textMessage'
       ) {
-        queryClient.setQueryData(['/chat-history', chatId], (state: MessageEntity[]) => {
+        queryClient.setQueryData(queryKeys.chatHistory.byChatId(chatId), (state: MessageEntity[]) => {
           const receivedMessage = MessageEntity.create(
             receivedNotification.body.idMessage,
             receivedNotification.body.messageData.textMessageData.textMessage,
