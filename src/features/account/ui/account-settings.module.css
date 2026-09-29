@@ -13,6 +13,8 @@
 .account-settings-table {
     border-collapse: separate;
     border-spacing: 20px 10px;
+    table-layout: fixed;
+    width: 100%;
 }
 
 .account-settings-table-title {
@@ -21,4 +23,6 @@
 
 .account-invite-link {
     color: var(--color-primary);
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
