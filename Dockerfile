@@ -3,12 +3,13 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 ARG VITE_API_URL=https://3100.api.green-api.com
-ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY . .
+RUN test -n "$VITE_API_URL"
 RUN yarn build
 
 FROM nginx:alpine

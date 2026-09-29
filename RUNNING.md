@@ -72,11 +72,29 @@ yarn lint
 Production-образ:
 
 ```bash
-docker build -t green-max-client .
-docker run --rm -p 80:80 green-max-client
+docker build --network=host -t smoldev-frontend .
+docker run -d \
+  --name smoldev-app \
+  --restart unless-stopped \
+  -p 80:80 \
+  -p 443:443 \
+  -v /etc/letsencrypt:/etc/letsencrypt:ro \
+  -v /etc/letsencrypt/live/smoldev.ru/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro \
+  -v /etc/letsencrypt/live/smoldev.ru/privkey.pem:/etc/nginx/ssl/privkey.pem:ro \
+  smoldev-frontend
 ```
 
-После запуска приложение доступно по адресу `http://localhost`.
+После запуска приложение доступно по адресу `https://smoldev.ru`.
+
+`VITE_API_URL` встраивается в клиент во время `docker build`. В Dockerfile используется значение `https://3100.api.green-api.com`, поэтому `.env` на уже запущенный nginx-контейнер не влияет.
+
+После изменения URL или Dockerfile пересоберите образ без кэша:
+
+```bash
+docker stop smoldev-app 2>/dev/null || true
+docker rm smoldev-app 2>/dev/null || true
+docker build --no-cache --network=host -t smoldev-frontend .
+```
 
 Локальная разработка через Docker:
 
