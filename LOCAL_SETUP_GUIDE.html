@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Green Max Client — локальный запуск</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    :root { color: #172033; font-family: "Segoe UI", Arial, sans-serif; }
+    body { margin: 0; font-size: 11pt; line-height: 1.5; }
+    h1 { color: #0969da; font-size: 25pt; margin: 0 0 6pt; }
+    h2 { color: #172033; font-size: 16pt; border-bottom: 2px solid #dbeafe; padding-bottom: 4pt; margin: 22pt 0 8pt; }
+    h3 { font-size: 12pt; margin: 14pt 0 5pt; }
+    p { margin: 6pt 0; }
+    ul, ol { margin-top: 5pt; }
+    li { margin: 3pt 0; }
+    code { font-family: Consolas, monospace; background: #f1f5f9; padding: 1pt 3pt; border-radius: 3pt; }
+    pre { background: #172033; color: #f8fafc; padding: 10pt 12pt; border-radius: 5pt; font: 9pt/1.45 Consolas, monospace; white-space: pre-wrap; }
+    .lead { color: #475569; font-size: 12pt; margin-bottom: 18pt; }
+    .note { background: #eff6ff; border-left: 4px solid #2563eb; padding: 8pt 10pt; margin: 10pt 0; }
+    .warning { background: #fff7ed; border-left-color: #ea580c; }
+    .meta { color: #64748b; font-size: 9pt; }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <p class="meta">Green Max Client</p>
+  <h1>Гайд по локальному запуску</h1>
+  <p class="lead">Инструкция для запуска проекта в режиме разработки и проверки production-сборки.</p>
+
+  <h2>1. Требования</h2>
+  <ul>
+    <li>Node.js 20 или новее.</li>
+    <li>Yarn или npm.</li>
+    <li>Доступ к Green API.</li>
+  </ul>
+
+  <h2>2. Установка проекта</h2>
+  <p>Перейдите в каталог проекта и установите зависимости:</p>
+  <pre>yarn install</pre>
+  <p>Альтернативный вариант через npm:</p>
+  <pre>npm install</pre>
+
+  <h2>3. Настройка окружения</h2>
+  <p>Создайте локальный файл <code>.env</code> из шаблона:</p>
+  <p>macOS/Linux:</p>
+  <pre>cp .env.example .env</pre>
+  <p>Windows PowerShell:</p>
+  <pre>Copy-Item .env.example .env</pre>
+  <p>В файле должна быть указана базовая ссылка API:</p>
+  <pre>VITE_API_URL=https://3100.api.green-api.com</pre>
+  <div class="note warning"><strong>Важно:</strong> файл <code>.env</code> используется локально и не должен добавляться в Git. Для проекта уже подготовлен безопасный шаблон <code>.env.example</code>.</div>
+
+  <h2>4. Запуск в режиме разработки</h2>
+  <p>Запустите dev-сервер:</p>
+  <pre>yarn dev</pre>
+  <p>или:</p>
+  <pre>npm run dev</pre>
+  <p>Откройте адрес из вывода Vite. Обычно это:</p>
+  <pre>http://localhost:5173</pre>
+  <p>На странице авторизации введите <code>idInstance</code> и <code>apiTokenInstance</code> Green API.</p>
+
+  <h2>5. Проверка production-сборки</h2>
+  <p>Соберите приложение:</p>
+  <pre>yarn build</pre>
+  <p>Предпросмотр собранного приложения:</p>
+  <pre>yarn preview</pre>
+  <p>Проверка кода линтером:</p>
+  <pre>yarn lint</pre>
+  <div class="note"><strong>Важно:</strong> переменная <code>VITE_API_URL</code> встраивается в JavaScript во время сборки. Изменение <code>.env</code> требует перезапуска dev-сервера или повторной production-сборки.</div>
+
+  <h2>6. Локальный запуск через Docker</h2>
+  <p>Соберите production-образ:</p>
+  <pre>docker build -f Dockerfile.local -t green-max-client-local .</pre>
+  <p>Запустите контейнер:</p>
+  <pre>docker run --rm -p 3000:3000 green-max-client-local</pre>
+  <p>Приложение будет доступно по адресу:</p>
+  <pre>http://localhost:3000</pre>
+
+  <h2>7. Частые проблемы</h2>
+  <h3>Изменения не отображаются</h3>
+  <p>Перезапустите dev-сервер. Для production удалите старую сборку и выполните <code>yarn build</code> заново.</p>
+  <h3>API использует старый адрес</h3>
+  <p>Проверьте значение <code>VITE_API_URL</code> и пересоберите приложение. В уже созданном Docker-образе переменные окружения не меняются после запуска контейнера.</p>
+  <h3>Зависимости устанавливаются с ошибкой</h3>
+  <p>Проверьте версию Node.js, наличие доступа к registry и повторите установку через пакетный менеджер, указанный в lock-файле проекта.</p>
+</body>
+</html>
