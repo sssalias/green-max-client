@@ -2,7 +2,7 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-ARG VITE_API_URL=https://3100.api.green-api.com
+ARG VITE_API_URL=https://green-api.com
 ENV VITE_API_URL=$VITE_API_URL
 
 COPY package.json yarn.lock ./
@@ -23,8 +23,8 @@ RUN echo 'server { \
 server { \
     listen 443 ssl; \
     server_name smoldev.ru www.smoldev.ru; \
-    ssl_certificate /etc/nginx/ssl/cert.pem; \
-    ssl_certificate_key /etc/nginx/ssl/key.pem; \
+    ssl_certificate /etc/nginx/ssl/fullchain.pem; \
+    ssl_certificate_key /etc/nginx/ssl/privkey.pem; \
     location / { \
         root /usr/share/nginx/html; \
         index index.html; \
